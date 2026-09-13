@@ -82,7 +82,9 @@ export function AgentDock({
 	const [hasStartedChat, setHasStartedChat] = useState(false);
 	const [isVoiceActive, setIsVoiceActive] = useState(false);
 	const [isTranscribing, setIsTranscribing] = useState(false);
-	const [conversation, setConversation] = useState<DockConversationMessage[]>([]);
+	const [conversation, setConversation] = useState<DockConversationMessage[]>(
+		[],
+	);
 	const [message, setMessage] = useState("");
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const conversationScrollRef = useRef<HTMLDivElement>(null);
@@ -304,9 +306,9 @@ export function AgentDock({
 		>
 			<motion.div
 				animate={{ scale: 1, y: 0 }}
-					className={
-						isExpanded
-							? `flex max-h-[calc(100dvh-5rem)] w-full ${hasStartedChat ? "flex-col" : "flex-col-reverse"} overflow-hidden rounded-2xl bg-card p-2 text-card-foreground shadow-card`
+				className={
+					isExpanded
+						? `flex max-h-[calc(100dvh-5rem)] w-full ${hasStartedChat ? "flex-col" : "flex-col-reverse"} overflow-hidden rounded-2xl bg-card p-2 text-card-foreground shadow-card`
 						: "ml-auto flex w-fit flex-col items-center gap-1.5 rounded-2xl bg-card px-2.5 py-2.5 text-card-foreground shadow-card"
 				}
 				initial={false}
@@ -327,10 +329,12 @@ export function AgentDock({
 						<motion.div
 							className="size-14 overflow-hidden rounded-xl"
 							layoutId="agent-avatar"
-							transition={shouldReduceMotion ? { duration: 0 } : dockLayoutTransition}
+							transition={
+								shouldReduceMotion ? { duration: 0 } : dockLayoutTransition
+							}
 						>
 							<Image
-								alt=""
+								alt="Ona"
 								aria-hidden="true"
 								className="size-full object-cover"
 								height={56}
@@ -341,7 +345,9 @@ export function AgentDock({
 						<motion.span
 							className="px-1 text-xs font-semibold leading-none"
 							layoutId="agent-name"
-							transition={shouldReduceMotion ? { duration: 0 } : dockLayoutTransition}
+							transition={
+								shouldReduceMotion ? { duration: 0 } : dockLayoutTransition
+							}
 						>
 							{agentName}
 						</motion.span>
@@ -353,7 +359,9 @@ export function AgentDock({
 								<motion.div
 									className="size-9 shrink-0 overflow-hidden rounded-xl"
 									layoutId="agent-avatar"
-									transition={shouldReduceMotion ? { duration: 0 } : dockLayoutTransition}
+									transition={
+										shouldReduceMotion ? { duration: 0 } : dockLayoutTransition
+									}
 								>
 									<Image
 										alt=""
@@ -374,7 +382,7 @@ export function AgentDock({
 								) : (
 									<LiveWaveform
 										active
-									barColor={waveformColor}
+										barColor={waveformColor}
 										barGap={2}
 										barHeight={2}
 										barWidth={3}
@@ -406,7 +414,9 @@ export function AgentDock({
 								<motion.div
 									className="size-9 shrink-0 overflow-hidden rounded-xl"
 									layoutId="agent-avatar"
-									transition={shouldReduceMotion ? { duration: 0 } : dockLayoutTransition}
+									transition={
+										shouldReduceMotion ? { duration: 0 } : dockLayoutTransition
+									}
 								>
 									<Image
 										alt=""
@@ -421,7 +431,11 @@ export function AgentDock({
 									<motion.span
 										className="block truncate text-xs font-semibold leading-none"
 										layoutId="agent-name"
-										transition={shouldReduceMotion ? { duration: 0 } : dockLayoutTransition}
+										transition={
+											shouldReduceMotion
+												? { duration: 0 }
+												: dockLayoutTransition
+										}
 									>
 										{agentName}
 									</motion.span>
@@ -449,7 +463,7 @@ export function AgentDock({
 											<CaretDownIcon className="size-4" weight="bold" />
 										</button>
 									)}
-					{mode === "idle" && !hasStartedChat && (
+									{mode === "idle" && !hasStartedChat && (
 										<>
 											<DockButton
 												icon={<MicrophoneIcon weight="bold" />}
@@ -463,26 +477,26 @@ export function AgentDock({
 												shortcut="C"
 												type="submit"
 											/>
-						</>
-					)}
-					{mode === "composing" && !hasStartedChat && (
-						<>
-							<DockButton
-								icon={<MicrophoneIcon weight="bold" />}
-								label="Voice"
-								onClick={startVoice}
-							/>
-							<DockButton
-								icon={<PaperPlaneTiltIcon weight="fill" />}
-								label="Send"
-								type="submit"
-							/>
-						</>
-					)}
+										</>
+									)}
+									{mode === "composing" && !hasStartedChat && (
+										<>
+											<DockButton
+												icon={<MicrophoneIcon weight="bold" />}
+												label="Voice"
+												onClick={startVoice}
+											/>
+											<DockButton
+												icon={<PaperPlaneTiltIcon weight="fill" />}
+												label="Send"
+												type="submit"
+											/>
+										</>
+									)}
 								</div>
 							</div>
 						)}
-		<motion.div
+						<motion.div
 							animate={{
 								height:
 									mode === "working"
@@ -503,121 +517,132 @@ export function AgentDock({
 							initial={false}
 							transition={shouldReduceMotion ? { duration: 0 } : dockTransition}
 						>
-			{hasStartedChat ? (
-				<div className="flex h-full min-h-0 flex-col gap-2 px-2 py-0">
-					<div className="flex min-h-0 flex-1 flex-col gap-1 overflow-hidden">
-						<div className="relative min-h-0 flex-1 overflow-hidden">
-							<div
-								className="relative z-0 h-full overflow-y-auto overscroll-contain px-2 py-1 text-sm leading-6 text-neutral-300 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent"
-								onScroll={handleConversationScroll}
-								ref={conversationScrollRef}
-								style={{
-									WebkitMaskImage:
-										"linear-gradient(to bottom, transparent 0, black 28px, black calc(100% - 32px), transparent 100%)",
-									maskImage:
-										"linear-gradient(to bottom, transparent 0, black 28px, black calc(100% - 32px), transparent 100%)",
-								}}
-							>
-								<div className="flex flex-col gap-2 pb-8 pt-7" ref={conversationContentRef}>
-									{conversation.map((entry, index) => (
-										<div key={`${entry.role}-${entry.id ?? index}`}>
-											{entry.activity === "searching" ? (
-												<div className="w-full">
-													<ToolGroup
-														state="pending"
-														nestedTools={simulatedTools}
-														completeLabel="Explored"
-														shimmerLabel="Exploring"
-														interruptedLabel="Exploration interrupted"
-														maxVisibleTools={3}
-														defaultOpen
-													/>
+							{hasStartedChat ? (
+								<div className="flex h-full min-h-0 flex-col gap-2 px-2 py-0">
+									<div className="flex min-h-0 flex-1 flex-col gap-1 overflow-hidden">
+										<div className="relative min-h-0 flex-1 overflow-hidden">
+											<div
+												className="relative z-0 h-full overflow-y-auto overscroll-contain px-2 py-1 text-sm leading-6 text-neutral-300 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent"
+												onScroll={handleConversationScroll}
+												ref={conversationScrollRef}
+												style={{
+													WebkitMaskImage:
+														"linear-gradient(to bottom, transparent 0, black 28px, black calc(100% - 32px), transparent 100%)",
+													maskImage:
+														"linear-gradient(to bottom, transparent 0, black 28px, black calc(100% - 32px), transparent 100%)",
+												}}
+											>
+												<div
+													className="flex flex-col gap-2 pb-8 pt-7"
+													ref={conversationContentRef}
+												>
+													{conversation.map((entry, index) => (
+														<div key={`${entry.role}-${entry.id ?? index}`}>
+															{entry.activity === "searching" ? (
+																<div className="w-full">
+																	<ToolGroup
+																		state="pending"
+																		nestedTools={simulatedTools}
+																		completeLabel="Explored"
+																		shimmerLabel="Exploring"
+																		interruptedLabel="Exploration interrupted"
+																		maxVisibleTools={3}
+																		defaultOpen
+																	/>
+																</div>
+															) : entry.activity === "thinking" ? (
+																<div className="flex items-center gap-3 px-2 py-2 text-sm text-muted-foreground">
+																	<ThinkingOrb
+																		state="working"
+																		size={20}
+																		theme={theme}
+																	/>
+																	<span>Thinking...</span>
+																</div>
+															) : (
+																<div
+																	className={
+																		entry.role === "user"
+																			? "w-full rounded-xl bg-[#e2e2e0] px-3 py-2 text-foreground dark:bg-[#2a2a28]"
+																			: "w-full rounded-xl bg-[#f8f8f6] px-3 py-2 text-foreground dark:bg-[#3a3a36]"
+																	}
+																>
+																	{entry.text}
+																</div>
+															)}
+														</div>
+													))}
 												</div>
-											) : entry.activity === "thinking" ? (
-											<div className="flex items-center gap-3 px-2 py-2 text-sm text-muted-foreground">
-													<ThinkingOrb state="working" size={20} theme={theme} />
-													<span>Thinking...</span>
-												</div>
-											) : (
-													<div
-														className={
-															entry.role === "user"
-																? "w-full rounded-xl bg-[#e2e2e0] px-3 py-2 text-foreground dark:bg-[#2a2a28]"
-																: "w-full rounded-xl bg-[#f8f8f6] px-3 py-2 text-foreground dark:bg-[#3a3a36]"
-														}
-													>
-													{entry.text}
-												</div>
-											)}
+											</div>
 										</div>
-									))}
+									</div>
+									<div className="flex shrink-0 flex-col gap-0">
+										<div className="relative w-full">
+											<textarea
+												aria-label="Message agent"
+												className="h-16 min-h-16 w-full resize-none bg-transparent px-2 py-2 text-sm leading-6 text-card-foreground outline-none placeholder:text-muted-foreground"
+												disabled={mode === "working"}
+												onChange={(event) => setMessage(event.target.value)}
+												onKeyDown={handleTextareaKeyDown}
+												placeholder={
+													mode === "working"
+														? "Thinking..."
+														: isTranscribing
+															? "Transcribing..."
+															: "Type something here..."
+												}
+												ref={textareaRef}
+												value={message}
+											/>
+										</div>
+										<div className="flex items-center justify-end gap-1.5">
+											<DockButton
+												disabled={mode === "working"}
+												icon={<MicrophoneIcon weight="bold" />}
+												label="Voice"
+												onClick={startVoice}
+												shortcut="V"
+											/>
+											<DockButton
+												disabled={mode === "working"}
+												icon={<PaperPlaneTiltIcon weight="fill" />}
+												label="Send"
+												shortcut="C"
+												type="submit"
+											/>
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
-					</div>
-					<div className="flex shrink-0 flex-col gap-0">
-						<div className="relative w-full">
-							<textarea
-								aria-label="Message agent"
-								className="h-16 min-h-16 w-full resize-none bg-transparent px-2 py-2 text-sm leading-6 text-card-foreground outline-none placeholder:text-muted-foreground"
-								disabled={mode === "working"}
-								onChange={(event) => setMessage(event.target.value)}
-								onKeyDown={handleTextareaKeyDown}
-								placeholder={
-									mode === "working"
-										? "Thinking..."
-										: isTranscribing
-											? "Transcribing..."
-											: "Type something here..."
-								}
-								ref={textareaRef}
-								value={message}
-							/>
-						</div>
-						<div className="flex items-center justify-end gap-1.5">
-							<DockButton
-								disabled={mode === "working"}
-								icon={<MicrophoneIcon weight="bold" />}
-								label="Voice"
-								onClick={startVoice}
-								shortcut="V"
-							/>
-							<DockButton
-								disabled={mode === "working"}
-								icon={<PaperPlaneTiltIcon weight="fill" />}
-								label="Send"
-								shortcut="C"
-								type="submit"
-							/>
-						</div>
-					</div>
-				</div>
-			) : (
-				<div className="flex items-end gap-2">
-					<div className="relative min-w-0 flex-1">
-						<button
-							aria-label="Close composer"
-							className="absolute right-1.5 top-1.5 flex size-6 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
-							onClick={() => {
-								setIsTranscribing(false);
-								setMode("idle");
-							}}
-							type="button"
-						>
-							<XIcon className="size-3.5" weight="bold" />
-						</button>
-						<textarea
-							aria-label="Message agent"
-									className="h-28 w-full resize-none bg-transparent px-2 py-2 pr-9 text-sm leading-6 text-card-foreground outline-none placeholder:text-muted-foreground"
-							onChange={(event) => setMessage(event.target.value)}
-							onKeyDown={handleTextareaKeyDown}
-							placeholder={isTranscribing ? "Transcribing..." : "Type something here..."}
-							ref={textareaRef}
-							value={message}
-						/>
-					</div>
-				</div>
-			)}
+							) : (
+								<div className="flex items-end gap-2">
+									<div className="relative min-w-0 flex-1">
+										<button
+											aria-label="Close composer"
+											className="absolute right-1.5 top-1.5 flex size-6 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+											onClick={() => {
+												setIsTranscribing(false);
+												setMode("idle");
+											}}
+											type="button"
+										>
+											<XIcon className="size-3.5" weight="bold" />
+										</button>
+										<textarea
+											aria-label="Message agent"
+											className="h-28 w-full resize-none bg-transparent px-2 py-2 pr-9 text-sm leading-6 text-card-foreground outline-none placeholder:text-muted-foreground"
+											onChange={(event) => setMessage(event.target.value)}
+											onKeyDown={handleTextareaKeyDown}
+											placeholder={
+												isTranscribing
+													? "Transcribing..."
+													: "Type something here..."
+											}
+											ref={textareaRef}
+											value={message}
+										/>
+									</div>
+								</div>
+							)}
 						</motion.div>
 					</>
 				)}
@@ -647,8 +672,8 @@ function DockButton({
 			onClick={onClick}
 			type={type}
 		>
-									<span className="size-4">{icon}</span>
-									<span>{label}</span>
+			<span className="size-4">{icon}</span>
+			<span>{label}</span>
 		</button>
 	);
 }

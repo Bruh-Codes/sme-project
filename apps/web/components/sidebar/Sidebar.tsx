@@ -11,6 +11,7 @@ import {
 	HomeIcon,
 	OverviewIcon,
 	ReadinessIcon,
+	SettingsIcon,
 } from "@/components/icons";
 import { NavLink } from "./NavLink";
 import icon from "@/public/icon.png";
@@ -153,7 +154,7 @@ export function Sidebar() {
 					)}
 				</Link>
 
-				<div className="flex flex-col">
+				<div className="flex flex-1 flex-col">
 					{NAV_GROUPS.map((group, groupIndex) => (
 						<div
 							key={group.label}
@@ -180,6 +181,11 @@ export function Sidebar() {
 							</div>
 						</div>
 					))}
+					<div className="mt-auto border-t border-border pb-3 pt-3">
+						<NavLink href="/settings" icon={<SettingsIcon />} collapsed={liveCollapsed}>
+							Settings
+						</NavLink>
+					</div>
 				</div>
 			</aside>
 

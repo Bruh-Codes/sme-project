@@ -2,6 +2,7 @@ import { Footer } from "@/components/ui/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import icon from "@/public/icon.png";
+import iconDark from "@/public/icon-dark.png";
 
 const STEPS = [
 	{
@@ -41,7 +42,20 @@ export default async function LandingPage() {
 		<div className="min-h-dvh flex flex-col bg-background text-foreground">
 			<header className="flex items-center px-6 sm:px-10 py-5">
 				<Link href="/" className="inline-flex items-center gap-2 hover:opacity-100">
-					<Image src={icon} alt="Onrecord" width={28} height={28} />
+					<Image
+						src={iconDark}
+						alt="Onrecord"
+						width={28}
+						height={28}
+						className="dark:hidden"
+					/>
+					<Image
+						src={icon}
+						alt=""
+						width={28}
+						height={28}
+						className="hidden dark:block"
+					/>
 					<span className="font-display text-[19px]">
 						Onrecord
 					</span>

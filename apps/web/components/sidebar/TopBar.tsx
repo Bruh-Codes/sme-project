@@ -10,6 +10,7 @@ import { authClient } from "@/lib/auth-client";
 import { useMarkAllNotificationsRead, useMarkNotificationRead, useMe, useNotifications } from "@/lib/hooks/use-business";
 import { ChangePasswordModal } from "@/components/sidebar/ChangePasswordModal";
 import icon from "@/public/icon.png";
+import iconDark from "@/public/icon-dark.png";
 
 export function TopBar() {
   const { theme, toggleTheme } = useTheme();
@@ -83,7 +84,7 @@ export function TopBar() {
         className="md:hidden flex items-center gap-2 shrink-0"
         aria-label="Onrecord home"
       >
-        <Image src={icon} alt="" width={26} height={26} />
+        <Image src={theme === "light" ? iconDark : icon} alt="" width={26} height={26} />
         <span className="font-display text-[16px] hidden sm:inline">Onrecord</span>
       </Link>
 
@@ -93,7 +94,7 @@ export function TopBar() {
       </div>
 
       <div className="ml-auto flex items-center gap-3 sm:gap-4 text-[13px] shrink-0">
-        <div ref={notificationsRef} className="relative">
+        <div ref={notificationsRef} className="relative hidden md:block">
           <button
             type="button"
             onClick={() => {
@@ -162,7 +163,7 @@ export function TopBar() {
           aria-pressed={isDark}
           aria-label="Toggle dark mode"
           title="Toggle dark mode"
-          className={`w-8 h-[18px] rounded-full relative cursor-pointer transition-colors ${
+          className={`hidden md:flex w-8 h-[18px] rounded-full relative cursor-pointer transition-colors ${
             isDark ? "bg-[#4a4a47]" : "bg-[#dddddb]"
           }`}
         >

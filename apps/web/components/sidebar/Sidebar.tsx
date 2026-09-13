@@ -14,6 +14,8 @@ import {
 } from "@/components/icons";
 import { NavLink } from "./NavLink";
 import icon from "@/public/icon.png";
+import iconDark from "@/public/icon-dark.png";
+import { useTheme } from "@/lib/theme";
 
 const MAX_WIDTH = 230;
 const COLLAPSED_WIDTH = 60;
@@ -55,6 +57,7 @@ function Tooltip({ label, showClass }: { label: string; showClass: string }) {
 }
 
 export function Sidebar() {
+	const { theme } = useTheme();
 	const [collapsed, setCollapsed] = useState(() => {
 		if (typeof window !== "undefined") {
 			const saved = localStorage.getItem("sidebar-collapsed");
@@ -140,7 +143,7 @@ export function Sidebar() {
 						liveCollapsed ? "justify-center" : "gap-2 px-2"
 					}`}
 				>
-					<Image src={icon} alt="" width={26} height={26} />
+					<Image src={theme === "light" ? iconDark : icon} alt="" width={26} height={26} />
 					{!liveCollapsed && <span className="font-display">Onrecord</span>}
 					{liveCollapsed && (
 						<Tooltip

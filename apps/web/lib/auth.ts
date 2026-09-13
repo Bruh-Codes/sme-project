@@ -78,6 +78,9 @@ export const auth = betterAuth({
 
 	user: {
 		modelName: "auth_user",
+		deleteUser: {
+			enabled: true,
+		},
 		additionalFields: {
 			// Populated once the owner's business (or reviewer's institution) is
 			// created in apps/api and written back here-not implemented yet,

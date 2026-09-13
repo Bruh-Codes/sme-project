@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { BellIcon, SearchIcon, SunIcon, MoonIcon, LogOutIcon } from "@/components/icons";
+import { BellIcon, SearchIcon, SunIcon, MoonIcon, LogOutIcon, KeyIcon } from "@/components/icons";
 import { useTheme } from "@/lib/theme";
 import { authClient } from "@/lib/auth-client";
 import { useMarkAllNotificationsRead, useMarkNotificationRead, useMe, useNotifications } from "@/lib/hooks/use-business";
+import { ChangePasswordModal } from "@/components/sidebar/ChangePasswordModal";
 import icon from "@/public/icon.png";
+import iconDark from "@/public/icon-dark.png";
 
 export function TopBar() {
   const { theme, toggleTheme } = useTheme();
@@ -21,6 +23,8 @@ export function TopBar() {
   const markAllRead = useMarkAllNotificationsRead(businessId);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [changePasswordOpenedAt, setChangePasswordOpenedAt] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
@@ -73,13 +77,14 @@ export function TopBar() {
   const displayTime = (value: string) => value.replace("T", " ").slice(0, 16);
 
   return (
+    <>
     <div className="flex items-center gap-3 px-3 sm:px-7 py-3 sm:py-3.5 border-b border-border sticky top-0 z-30 bg-background/80 backdrop-blur">
       <Link
         href="/dashboard"
         className="md:hidden flex items-center gap-2 shrink-0"
         aria-label="Onrecord home"
       >
-        <Image src={icon} alt="" width={26} height={26} />
+        <Image src={theme === "light" ? iconDark : icon} alt="" width={26} height={26} />
         <span className="font-display text-[16px] hidden sm:inline">Onrecord</span>
       </Link>
 
@@ -89,7 +94,7 @@ export function TopBar() {
       </div>
 
       <div className="ml-auto flex items-center gap-3 sm:gap-4 text-[13px] shrink-0">
-        <div ref={notificationsRef} className="relative">
+        <div ref={notificationsRef} className="relative hidden md:block">
           <button
             type="button"
             onClick={() => {
@@ -158,7 +163,7 @@ export function TopBar() {
           aria-pressed={isDark}
           aria-label="Toggle dark mode"
           title="Toggle dark mode"
-          className={`w-8 h-[18px] rounded-full relative cursor-pointer transition-colors ${
+          className={`hidden md:flex w-8 h-[18px] rounded-full relative cursor-pointer transition-colors ${
             isDark ? "bg-[#4a4a47]" : "bg-[#dddddb]"
           }`}
         >
@@ -240,6 +245,20 @@ export function TopBar() {
               <button
                 type="button"
                 role="menuitem"
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  // Remount the modal so each open starts from a clean form.
+                  setChangePasswordOpenedAt(Date.now());
+                  setIsChangePasswordOpen(true);
+                }}
+                className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] text-left transition-colors hover:bg-foreground hover:text-background cursor-pointer"
+              >
+                <KeyIcon className="w-4 h-4" />
+                Change password
+              </button>
+              <button
+                type="button"
+                role="menuitem"
                 onClick={handleLogout}
                 disabled={isLoading}
                 className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] text-left transition-colors hover:bg-foreground hover:text-background cursor-pointer disabled:opacity-60"
@@ -252,5 +271,12 @@ export function TopBar() {
         </div>
       </div>
     </div>
+
+    <ChangePasswordModal
+      key={changePasswordOpenedAt}
+      open={isChangePasswordOpen}
+      onClose={() => setIsChangePasswordOpen(false)}
+    />
+    </>
   );
 }
